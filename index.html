@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vayanashala – Community Book Exchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wood-dark: #3b1f0a;
+    --wood-mid: #6b3a1f;
+    --wood-light: #9c5e32;
+    --wood-grain: #8b4513;
+    --shelf-board: #c4883a;
+    --cream: #f5edd8;
+    --aged-cream: #ede0c4;
+    --ink: #1a0f00;
+    --ink-soft: #3d2b1f;
+    --gold: #c9892c;
+    --gold-light: #e8b86d;
+    --Kerala-green: #2d5016;
+    --Kerala-green-light: #4a7a28;
+    --terracotta: #c4622d;
+    --terracotta-light: #e07a45;
+    --dusty-rose: #b56e52;
+    --spine-blue: #1a3a5c;
+    --spine-teal: #1a5c4a;
+    --spine-maroon: #5c1a2e;
+    --spine-olive: #3d4a1a;
+    --spine-purple: #3a1a5c;
+    --shadow-deep: rgba(30,10,0,0.5);
+    --shadow-book: rgba(0,0,0,0.4);
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    background-color: var(--wood-dark);
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.015) 2px,
+        rgba(255,255,255,0.015) 4px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 40px,
+        rgba(0,0,0,0.05) 40px,
+        rgba(0,0,0,0.05) 41px
+      );
+  }
+ 
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #1a0800 0%, var(--wood-dark) 100%);
+    border-bottom: 4px solid var(--gold);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        85deg,
+        transparent,
+        transparent 8px,
+        rgba(160,90,30,0.08) 8px,
+        rgba(160,90,30,0.08) 10px
+      );
+    pointer-events: none;
+  }
+ 
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 36px 40px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+ 
+  .header-badge {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.85;
+  }
+ 
+  .logo-line {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+ 
+  .logo-ornament {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+ 
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    text-shadow: 0 2px 20px rgba(200,130,40,0.3);
+    line-height: 1;
+  }
+ 
+  h1 span {
+    color: var(--gold);
+  }
+ 
+  .malayalam-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    opacity: 0.9;
+    letter-spacing: 0.05em;
+  }
+ 
+  .tagline {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--aged-cream);
+    opacity: 0.7;
+    letter-spacing: 0.08em;
+  }
+ 
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--wood-dark);
+    border-bottom: 3px solid var(--wood-mid);
+    padding: 0 40px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+ 
+  .tab-btn {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--aged-cream);
+    background: none;
+    border: none;
+    padding: 14px 28px;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.6;
+    transition: opacity 0.25s, color 0.25s;
+    white-space: nowrap;
+  }
+ 
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+  }
+ 
+  .tab-btn.active, .tab-btn:hover {
+    opacity: 1;
+    color: var(--gold-light);
+  }
+ 
+  .tab-btn.active::after { transform: scaleX(1); }
+ 
+  /* ── MAIN CONTAINER ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+ 
+  /* ── SEARCH BAR ── */
+  .search-section {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+ 
+  .search-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--gold-light);
+    opacity: 0.85;
+  }
+ 
+  .search-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+  }
+ 
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: var(--gold);
+    pointer-events: none;
+  }
+ 
+  #searchInput {
+    width: 100%;
+    padding: 16px 20px 16px 50px;
+    background: rgba(255,255,255,0.07);
+    border: 2px solid rgba(200,140,50,0.35);
+    border-radius: 4px;
+    color: var(--cream);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.15rem;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s;
+    backdrop-filter: blur(4px);
+  }
+ 
+  #searchInput::placeholder { color: rgba(245,237,216,0.4); font-style: italic; }
+  #searchInput:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.1);
+  }
+ 
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+ 
+  .filter-chip {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.88rem;
+    letter-spacing: 0.06em;
+    padding: 6px 16px;
+    border: 1px solid rgba(200,140,50,0.3);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--aged-cream);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+ 
+  .filter-chip:hover, .filter-chip.active {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+ 
+  /* ── RESULT COUNT ── */
+  .results-info {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--gold-light);
+    opacity: 0.7;
+    margin-bottom: 20px;
+    min-height: 1.2em;
+  }
+ 
+  /* ── SHELF SECTION ── */
+  .shelf-section { margin-bottom: 60px; }
+ 
+  .shelf-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+ 
+  .shelf-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+ 
+  .shelf-divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,140,50,0.4), transparent);
+  }
+ 
+  /* ── VIRTUAL SHELF ── */
+  .shelf-unit {
+    position: relative;
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+  }
+ 
+  /* wooden shelf board */
+  .shelf-board {
+    position: absolute;
+    bottom: 0;
+    left: -16px;
+    right: -16px;
+    height: 28px;
+    background: linear-gradient(180deg,
+      #a0641e 0%,
+      var(--shelf-board) 30%,
+      #8b5218 60%,
+      #5c3410 100%
+    );
+    border-radius: 2px;
+    box-shadow:
+      0 6px 20px rgba(0,0,0,0.6),
+      0 2px 0px rgba(255,200,100,0.15) inset,
+      0 -1px 0 rgba(0,0,0,0.4) inset;
+  }
+ 
+  .shelf-board::before {
+    content: '';
+    position: absolute;
+    inset: 4px 0 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(0,0,0,0.08) 60px,
+      rgba(0,0,0,0.08) 62px
+    );
+  }
+ 
+  .books-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 0 8px;
+    min-height: 180px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--wood-mid) transparent;
+  }
+ 
+  .books-row::-webkit-scrollbar { height: 4px; }
+  .books-row::-webkit-scrollbar-track { background: transparent; }
+  .books-row::-webkit-scrollbar-thumb { background: var(--wood-mid); border-radius: 2px; }
+ 
+  /* ── BOOK SPINE ── */
+  .book-spine {
+    flex-shrink: 0;
+    width: 42px;
+    height: 160px;
+    border-radius: 2px 4px 4px 2px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), filter 0.2s;
+    transform-origin: bottom center;
+    box-shadow:
+      -3px 0 6px rgba(0,0,0,0.4),
+      3px 0 8px rgba(0,0,0,0.3),
+      inset 2px 0 4px rgba(255,255,255,0.08),
+      inset -2px 0 4px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+ 
+  .book-spine:hover {
+    transform: translateY(-18px) scale(1.04);
+    filter: brightness(1.15);
+    z-index: 10;
+  }
+ 
+  .book-spine.highlighted {
+    animation: pulse-highlight 0.6s ease;
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+ 
+  @keyframes pulse-highlight {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-22px) scale(1.08); }
+    100% { transform: translateY(-18px) scale(1.04); }
+  }
+ 
+  .book-spine.dimmed {
+    opacity: 0.25;
+    filter: saturate(0.3);
+  }
+ 
+  .book-spine-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 4px;
+    position: relative;
+  }
+ 
+  .book-spine-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    line-height: 1.3;
+    max-height: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+ 
+  .book-spine-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+ 
+  /* color themes for spines */
+  .spine-c0 { background: linear-gradient(180deg, #1a3a5c 0%, #0d2035 100%); }
+  .spine-c1 { background: linear-gradient(180deg, #5c1a2e 0%, #380f1b 100%); }
+  .spine-c2 { background: linear-gradient(180deg, #1a5c4a 0%, #0d3a2d 100%); }
+  .spine-c3 { background: linear-gradient(180deg, #3a4a1a 0%, #232d0f 100%); }
+  .spine-c4 { background: linear-gradient(180deg, #3a1a5c 0%, #200d38 100%); }
+  .spine-c5 { background: linear-gradient(180deg, #5c3a1a 0%, #38220f 100%); }
+  .spine-c6 { background: linear-gradient(180deg, #1a4a5c 0%, #0d2d38 100%); }
+  .spine-c7 { background: linear-gradient(180deg, #4a1a1a 0%, #2d0f0f 100%); }
+ 
+  /* height variation */
+  .book-spine:nth-child(3n) { height: 175px; }
+  .book-spine:nth-child(5n) { height: 145px; }
+  .book-spine:nth-child(7n) { height: 190px; }
+ 
+  /* width variation */
+  .book-spine:nth-child(2n) { width: 36px; }
+  .book-spine:nth-child(4n) { width: 48px; }
+ 
+  /* ── BOOK TOOLTIP ── */
+  .book-tooltip {
+    position: fixed;
+    background: linear-gradient(135deg, #1c0d00 0%, var(--wood-dark) 100%);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 18px 22px;
+    max-width: 280px;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.18s, transform 0.18s;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  }
+ 
+  .book-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+ 
+  .tooltip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+ 
+  .tooltip-author {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--gold-light);
+    margin-bottom: 10px;
+  }
+ 
+  .tooltip-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+ 
+  .tooltip-tag {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background: rgba(200,140,50,0.2);
+    color: var(--gold-light);
+    border: 1px solid rgba(200,140,50,0.3);
+  }
+ 
+  .tooltip-tag.avail {
+    background: rgba(74,122,40,0.25);
+    color: #8bc34a;
+    border-color: rgba(74,122,40,0.4);
+  }
+ 
+  .tooltip-tag.swap {
+    background: rgba(196,98,45,0.25);
+    color: var(--terracotta-light);
+    border-color: rgba(196,98,45,0.4);
+  }
+ 
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+ 
+  /* ── ADD BOOK FORM ── */
+  .form-card {
+    background: linear-gradient(135deg, rgba(59,31,10,0.8), rgba(30,15,0,0.9));
+    border: 1px solid rgba(200,140,50,0.2);
+    border-radius: 8px;
+    padding: 40px;
+    max-width: 680px;
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+ 
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+ 
+  .form-sub {
+    text-align: center;
+    font-style: italic;
+    color: var(--gold-light);
+    opacity: 0.7;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+  }
+ 
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+ 
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+ 
+  .form-group.full { grid-column: 1 / -1; }
+ 
+  .form-group label {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.85;
+  }
+ 
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(200,140,50,0.25);
+    border-radius: 4px;
+    padding: 12px 16px;
+    color: var(--cream);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+ 
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+ 
+  .form-group select option {
+    background: var(--wood-dark);
+    color: var(--cream);
+  }
+ 
+  .form-group textarea { resize: vertical; min-height: 80px; }
+ 
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+ 
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--aged-cream);
+  }
+ 
+  .radio-label input[type=radio] { accent-color: var(--gold); cursor: pointer; }
+ 
+  .submit-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    background-size: 200% 100%;
+    border: none;
+    border-radius: 4px;
+    color: var(--ink);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background-position 0.4s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(200,140,50,0.3);
+  }
+ 
+  .submit-btn:hover {
+    background-position: 100% 0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(200,140,50,0.5);
+  }
+ 
+  .submit-btn:active { transform: translateY(0); }
+ 
+  /* ── SUCCESS TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--Kerala-green), #1d3a0f);
+    border: 1px solid rgba(140,200,70,0.4);
+    color: #c8f08a;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    padding: 14px 30px;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), opacity 0.4s;
+    opacity: 0;
+    pointer-events: none;
+  }
+ 
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+ 
+  /* ── MAP / NEIGHBORHOODS ── */
+  .neighborhood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+ 
+  .neighborhood-card {
+    background: linear-gradient(135deg, rgba(59,31,10,0.6), rgba(30,15,0,0.8));
+    border: 1px solid rgba(200,140,50,0.18);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+ 
+  .neighborhood-card:hover {
+    border-color: rgba(200,140,50,0.5);
+    transform: translateY(-3px);
+  }
+ 
+  .neighborhood-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gold);
+  }
+ 
+  .nc-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+ 
+  .nc-malayalam {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    opacity: 0.8;
+    margin-bottom: 14px;
+  }
+ 
+  .nc-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+ 
+  .nc-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+ 
+  .nc-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+ 
+  .nc-stat-label {
+    font-size: 0.75rem;
+    color: var(--aged-cream);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+  }
+ 
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--aged-cream);
+    opacity: 0.5;
+  }
+ 
+  .empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .empty-state p { font-size: 0.95rem; }
+ 
+  /* ── GRID VIEW (for Browse) ── */
+  .view-toggle {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+ 
+  .view-btn {
+    background: none;
+    border: 1px solid rgba(200,140,50,0.25);
+    border-radius: 4px;
+    padding: 6px 10px;
+    color: var(--aged-cream);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+ 
+  .view-btn.active, .view-btn:hover {
+    background: rgba(200,140,50,0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+ 
+  .book-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+ 
+  .book-card {
+    background: linear-gradient(160deg, rgba(59,31,10,0.7), rgba(20,8,0,0.9));
+    border: 1px solid rgba(200,140,50,0.15);
+    border-radius: 6px;
+    padding: 18px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+ 
+  .book-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+  }
+ 
+  .book-card-color-bar {
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+  }
+ 
+  .book-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+ 
+  .book-card-author {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+ 
+  .book-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+ 
+  .book-card-loc {
+    font-size: 0.75rem;
+    color: var(--aged-cream);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+ 
+  .book-card-status {
+    font-size: 0.72rem;
+    padding: 2px 10px;
+    border-radius: 50px;
+  }
+ 
+  .status-lend { background: rgba(74,122,40,0.25); color: #8bc34a; border: 1px solid rgba(74,122,40,0.4); }
+  .status-swap { background: rgba(196,98,45,0.25); color: var(--terracotta-light); border: 1px solid rgba(196,98,45,0.4); }
+  .status-both { background: rgba(200,140,50,0.2); color: var(--gold-light); border: 1px solid rgba(200,140,50,0.3); }
+ 
+  /* ── DECORATIVE ── */
+  .section-divider {
+    text-align: center;
+    margin: 40px 0;
+    color: var(--gold);
+    opacity: 0.3;
+    font-size: 1.2rem;
+    letter-spacing: 1em;
+  }
+ 
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-card { padding: 24px 20px; }
+    .header-inner { padding: 28px 20px 20px; }
+    .main { padding: 24px 16px 60px; }
+    .book-cards-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
+ 
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .panel.active > * {
+    animation: fadeUp 0.35s ease forwards;
+  }
+ 
+  .book-spine { animation: fadeUp 0.4s ease forwards; }
+</style>
+</head>
+<body>
+ 
+<header>
+  <div class="header-inner">
+    <div class="header-badge">est. Kerala · Community Book Exchange</div>
+    <div class="logo-line">
+      <div class="logo-ornament"></div>
+      <h1>Vayana<span>shala</span></h1>
+      <div class="logo-ornament"></div>
+    </div>
+    <div class="malayalam-subtitle">Vayanashala — A Digital Community Library</div>
+    <div class="tagline">"Where every home is a library, and every street a reading room"</div>
+  </div>
+</header>
+ 
+<nav class="nav-tabs">
+  <button class="tab-btn active" data-tab="shelf">📚 Browse Shelf</button>
+  <button class="tab-btn" data-tab="contribute">✍️ Add a Book</button>
+  <button class="tab-btn" data-tab="neighborhoods">📍 Neighborhoods</button>
+</nav>
+ 
+<!-- TOOLTIP -->
+<div class="book-tooltip" id="tooltip">
+  <div class="tooltip-title" id="tt-title"></div>
+  <div class="tooltip-author" id="tt-author"></div>
+  <div class="tooltip-meta" id="tt-meta"></div>
+</div>
+ 
+<!-- TOAST -->
+<div class="toast" id="toast">📖 Book added to the shelf! Thank you.</div>
+ 
+<main class="main">
+ 
+  <!-- ── SHELF PANEL ── -->
+  <section class="panel active" id="panel-shelf">
+    <div class="search-section">
+      <div class="search-label">Search the Community Shelf</div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search by title, author, genre… Basheer, Madhavikutty…">
+      </div>
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip active" data-filter="all">All Books</button>
+        <button class="filter-chip" data-filter="lend">Available to Lend</button>
+        <button class="filter-chip" data-filter="swap">Open to Swap</button>
+        <button class="filter-chip" data-filter="malayalam">Malayalam</button>
+        <button class="filter-chip" data-filter="fiction">Fiction</button>
+        <button class="filter-chip" data-filter="poetry">Poetry</button>
+      </div>
+    </div>
+ 
+    <div class="results-info" id="resultsInfo"></div>
+ 
+    <!-- SHELF ROWS by genre -->
+    <div id="shelfContainer"></div>
+ 
+    <!-- GRID view toggle -->
+    <div class="shelf-title-row" style="margin-top:40px;">
+      <div class="shelf-title">All Titles — Card View</div>
+      <div class="shelf-divider"></div>
+    </div>
+    <div class="book-cards-grid" id="cardGrid"></div>
+ 
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-state-icon">📭</div>
+      <h3>No books found</h3>
+      <p>Try a different search term or filter.</p>
+    </div>
+  </section>
+ 
+  <!-- ── ADD BOOK PANEL ── -->
+  <section class="panel" id="panel-contribute">
+    <div class="form-card">
+      <div class="form-title">List Your Book</div>
+      <div class="form-sub">Share a title from your home shelf with the community</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Book Title *</label>
+          <input type="text" id="fTitle" placeholder="e.g. Balyakalasakhi" required>
+        </div>
+        <div class="form-group">
+          <label>Author *</label>
+          <input type="text" id="fAuthor" placeholder="e.g. Vaikom Muhammad Basheer">
+        </div>
+        <div class="form-group">
+          <label>Language</label>
+          <select id="fLang">
+            <option value="Malayalam">Malayalam</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Genre</label>
+          <select id="fGenre">
+            <option value="Fiction">Fiction</option>
+            <option value="Poetry">Poetry</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="History">History</option>
+            <option value="Philosophy">Philosophy</option>
+            <option value="Children">Children's</option>
+            <option value="Autobiography">Autobiography</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Neighborhood *</label>
+          <select id="fNeighborhood">
+            <option value="">— Select —</option>
+            <option>Thampanoor</option>
+            <option>Kowdiar</option>
+            <option>Pattom</option>
+            <option>Vanchiyoor</option>
+            <option>Kazhakkoottam</option>
+            <option>Sreekaryam</option>
+            <option>Mannanthala</option>
+            <option>Palayam</option>
+            <option>Kesavadasapuram</option>
+            <option>Ulloor</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input type="text" id="fOwner" placeholder="Your name (optional)">
+        </div>
+        <div class="form-group full">
+          <label>Offering As *</label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="offering" value="lend" checked> Available to Lend</label>
+            <label class="radio-label"><input type="radio" name="offering" value="swap"> Open to Swap</label>
+            <label class="radio-label"><input type="radio" name="offering" value="both"> Both</label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Brief Note (optional)</label>
+          <textarea id="fNote" placeholder="Condition, any message to the reader…"></textarea>
+        </div>
+      </div>
+      <button class="submit-btn" id="submitBtn">✦ Add to Community Shelf ✦</button>
+    </div>
+  </section>
+ 
+  <!-- ── NEIGHBORHOODS PANEL ── -->
+  <section class="panel" id="panel-neighborhoods">
+    <div class="shelf-title-row" style="margin-bottom:28px;">
+      <div class="shelf-title">Books by Neighborhood</div>
+      <div class="shelf-divider"></div>
+    </div>
+    <div class="neighborhood-grid" id="neighborhoodGrid"></div>
+  </section>
+ 
+</main>
+ 
+<script>
+// ── INITIAL DATA ──
+const initialBooks = [
+  { id:1,  title:"Balyakalasakhi",         author:"Vaikom Muhammad Basheer",  lang:"Malayalam", genre:"Fiction",      neighborhood:"Thampanoor",    offering:"lend",  owner:"Priya M.",   note:"Well-loved copy, handle with care." },
+  { id:2,  title:"Aadujeevitham",          author:"Benyamin",                 lang:"Malayalam", genre:"Fiction",      neighborhood:"Kowdiar",       offering:"swap",  owner:"Rajan K.",   note:"Looking for Basheer in exchange." },
+  { id:3,  title:"Mayyazhippuzhayude Theerangalil", author:"M. Mukundan",    lang:"Malayalam", genre:"Fiction",      neighborhood:"Pattom",        offering:"lend",  owner:"Anitha S.",  note:"" },
+  { id:4,  title:"Chemmeen",               author:"Thakazhi Sivasankara Pillai", lang:"Malayalam", genre:"Fiction",  neighborhood:"Vanchiyoor",    offering:"both",  owner:"Suresh V.",  note:"Classic, great condition." },
+  { id:5,  title:"Oru Desathinte Katha",   author:"S. K. Pottekkat",         lang:"Malayalam", genre:"Fiction",      neighborhood:"Kazhakkoottam", offering:"lend",  owner:"Meera P.",   note:"" },
+  { id:6,  title:"Randamoozham",           author:"M. T. Vasudevan Nair",    lang:"Malayalam", genre:"Fiction",      neighborhood:"Sreekaryam",    offering:"swap",  owner:"Govind R.",  note:"Masterpiece — must read!" },
+  { id:7,  title:"Kayar",                  author:"Thakazhi Sivasankara Pillai", lang:"Malayalam", genre:"Fiction",  neighborhood:"Palayam",       offering:"lend",  owner:"Latha N.",   note:"" },
+  { id:8,  title:"Enthaanu Sundaram",      author:"Madhavikutty",            lang:"Malayalam", genre:"Autobiography",neighborhood:"Mannanthala",   offering:"lend",  owner:"Deepa K.",   note:"Very personal story." },
+  { id:9,  title:"Padheyam",              author:"G. Sankara Kurup",         lang:"Malayalam", genre:"Poetry",       neighborhood:"Ulloor",        offering:"lend",  owner:"Biju T.",    note:"Award-winning poetry collection." },
+  { id:10, title:"Madhuramadhuram",        author:"Sugathakumari",           lang:"Malayalam", genre:"Poetry",       neighborhood:"Kesavadasapuram",offering:"both", owner:"Sindhu M.",  note:"" },
+  { id:11, title:"To Kill a Mockingbird",  author:"Harper Lee",              lang:"English",   genre:"Fiction",      neighborhood:"Kowdiar",       offering:"lend",  owner:"Thomas J.",  note:"Timeless." },
+  { id:12, title:"The God of Small Things",author:"Arundhati Roy",           lang:"English",   genre:"Fiction",      neighborhood:"Pattom",        offering:"swap",  owner:"Nisha A.",   note:"Booker winner." },
+  { id:13, title:"Sapiens",               author:"Yuval Noah Harari",        lang:"English",   genre:"Non-Fiction",  neighborhood:"Sreekaryam",    offering:"lend",  owner:"Arjun V.",   note:"Fascinating read." },
+  { id:14, title:"Malabar Manual",        author:"William Logan",            lang:"English",   genre:"History",      neighborhood:"Thampanoor",    offering:"lend",  owner:"Harikrishnan P.", note:"Rare historical record." },
+  { id:15, title:"Sancharam",             author:"O. V. Vijayan",            lang:"Malayalam", genre:"Fiction",      neighborhood:"Palayam",       offering:"both",  owner:"Rekha D.",   note:"" },
+  { id:16, title:"Guru",                  author:"Sachidanandan",            lang:"Malayalam", genre:"Poetry",       neighborhood:"Vanchiyoor",    offering:"lend",  owner:"Vijay S.",   note:"Modern Malayalam poetry." },
+  { id:17, title:"Ente Katha",            author:"Madhavikutty",            lang:"Malayalam", genre:"Autobiography",neighborhood:"Kazhakkoottam", offering:"swap",  owner:"Ambika R.",  note:"The celebrated memoir." },
+  { id:18, title:"Njaan Gandharvan",      author:"M. T. Vasudevan Nair",    lang:"Malayalam", genre:"Fiction",      neighborhood:"Ulloor",        offering:"lend",  owner:"Prakash M.", note:"" },
+];
+ 
+let books = [...initialBooks];
+let activeFilter = "all";
+let searchTerm = "";
+let currentView = "shelf";
+ 
+// spine color classes cycling
+const spineColors = ["spine-c0","spine-c1","spine-c2","spine-c3","spine-c4","spine-c5","spine-c6","spine-c7"];
+const spineColorMap = {};
+ 
+function getSpineColor(id) {
+  if (!spineColorMap[id]) {
+    spineColorMap[id] = spineColors[id % spineColors.length];
+  }
+  return spineColorMap[id];
+}
+ 
+const genreColors = {
+  Fiction:       "#2a6",
+  Poetry:        "#a26",
+  "Non-Fiction": "#26a",
+  History:       "#a62",
+  Philosophy:    "#62a",
+  Children:      "#6a2",
+  Autobiography: "#a42",
+  Other:         "#568"
+};
+ 
+// ── FILTER LOGIC ──
+function filteredBooks() {
+  return books.filter(b => {
+    // search
+    const q = searchTerm.toLowerCase();
+    const matchSearch = !q || [b.title, b.author, b.genre, b.lang, b.neighborhood, b.owner]
+      .some(v => v && v.toLowerCase().includes(q));
+    // chip filter
+    let matchFilter = true;
+    if (activeFilter === "lend") matchFilter = b.offering === "lend" || b.offering === "both";
+    else if (activeFilter === "swap") matchFilter = b.offering === "swap" || b.offering === "both";
+    else if (activeFilter === "malayalam") matchFilter = b.lang === "Malayalam";
+    else if (activeFilter === "fiction") matchFilter = b.genre === "Fiction";
+    else if (activeFilter === "poetry") matchFilter = b.genre === "Poetry";
+    return matchSearch && matchFilter;
+  });
+}
+ 
+// ── RENDER SHELF ──
+function renderShelf() {
+  const container = document.getElementById("shelfContainer");
+  const cardGrid  = document.getElementById("cardGrid");
+  const emptyState = document.getElementById("emptyState");
+  const resultsInfo = document.getElementById("resultsInfo");
+ 
+  const visible = filteredBooks();
+ 
+  resultsInfo.textContent = visible.length
+    ? `Showing ${visible.length} of ${books.length} books`
+    : "";
+ 
+  // group by genre
+  const grouped = {};
+  visible.forEach(b => {
+    if (!grouped[b.genre]) grouped[b.genre] = [];
+    grouped[b.genre].push(b);
+  });
+ 
+  container.innerHTML = "";
+  cardGrid.innerHTML = "";
+ 
+  if (visible.length === 0) {
+    emptyState.style.display = "block";
+    return;
+  }
+  emptyState.style.display = "none";
+ 
+  // Shelf rows
+  Object.entries(grouped).forEach(([genre, genreBooks]) => {
+    const section = document.createElement("div");
+    section.className = "shelf-section";
+ 
+    section.innerHTML = `
+      <div class="shelf-title-row">
+        <div class="shelf-title">${genre}</div>
+        <div class="shelf-divider"></div>
+        <span style="font-size:0.78rem;opacity:0.5;font-style:italic;white-space:nowrap">${genreBooks.length} title${genreBooks.length>1?'s':''}</span>
+      </div>
+      <div class="shelf-unit">
+        <div class="books-row" id="row-${genre.replace(/\s/g,'')}"></div>
+        <div class="shelf-board"></div>
+      </div>
+    `;
+    container.appendChild(section);
+ 
+    const row = section.querySelector(".books-row");
+    genreBooks.forEach(b => {
+      const spine = createSpine(b);
+      row.appendChild(spine);
+    });
+  });
+ 
+  // Card grid
+  visible.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "book-card";
+    const color = genreColors[b.genre] || "#568";
+    card.innerHTML = `
+      <div class="book-card-color-bar" style="background:${color}"></div>
+      <div class="book-card-title">${b.title}</div>
+      <div class="book-card-author">${b.author}</div>
+      <div class="book-card-footer">
+        <div class="book-card-loc">📍 ${b.neighborhood}</div>
+        <span class="book-card-status status-${b.offering}">${statusLabel(b.offering)}</span>
+      </div>
+    `;
+    card.addEventListener("click", () => openModal(b));
+    cardGrid.appendChild(card);
+  });
+}
+ 
+function statusLabel(offering) {
+  if (offering === "lend") return "Lend";
+  if (offering === "swap") return "Swap";
+  return "Lend/Swap";
+}
+ 
+function createSpine(b) {
+  const spine = document.createElement("div");
+  spine.className = `book-spine ${getSpineColor(b.id)}`;
+  spine.dataset.id = b.id;
+  spine.innerHTML = `
+    <div class="book-spine-inner">
+      <div class="book-spine-dot"></div>
+      <div class="book-spine-text">${b.title}</div>
+      <div class="book-spine-dot"></div>
+    </div>
+  `;
+ 
+  // Tooltip
+  const tooltip = document.getElementById("tooltip");
+  spine.addEventListener("mouseenter", (e) => {
+    document.getElementById("tt-title").textContent = b.title;
+    document.getElementById("tt-author").textContent = b.author;
+    document.getElementById("tt-meta").innerHTML = `
+      <span class="tooltip-tag">${b.genre}</span>
+      <span class="tooltip-tag">${b.lang}</span>
+      <span class="tooltip-tag avail">📍 ${b.neighborhood}</span>
+      <span class="tooltip-tag ${b.offering === 'lend' ? 'avail' : 'swap'}">${statusLabel(b.offering)}</span>
+      ${b.owner ? `<span class="tooltip-tag">👤 ${b.owner}</span>` : ""}
+    `;
+    tooltip.classList.add("visible");
+    positionTooltip(e);
+  });
+ 
+  spine.addEventListener("mousemove", positionTooltip);
+  spine.addEventListener("mouseleave", () => tooltip.classList.remove("visible"));
+ 
+  return spine;
+}
+ 
+function positionTooltip(e) {
+  const tooltip = document.getElementById("tooltip");
+  const x = e.clientX + 16;
+  const y = e.clientY - 10;
+  const maxX = window.innerWidth - tooltip.offsetWidth - 20;
+  const maxY = window.innerHeight - tooltip.offsetHeight - 20;
+  tooltip.style.left = Math.min(x, maxX) + "px";
+  tooltip.style.top  = Math.min(y, maxY) + "px";
+}
+ 
+// ── NEIGHBORHOODS ──
+function renderNeighborhoods() {
+  const grid = document.getElementById("neighborhoodGrid");
+  const neighborhoods = {};
+  books.forEach(b => {
+    if (!neighborhoods[b.neighborhood]) neighborhoods[b.neighborhood] = { lend:0, swap:0, total:0, genres: new Set() };
+    const n = neighborhoods[b.neighborhood];
+    n.total++;
+    if (b.offering === "lend" || b.offering === "both") n.lend++;
+    if (b.offering === "swap" || b.offering === "both") n.swap++;
+    n.genres.add(b.genre);
+  });
+ 
+  const malayalamNames = {
+    Thampanoor:"Thampanoor", Kowdiar:"Kowdiar", Pattom:"Pattom",
+    Vanchiyoor:"Vanchiyoor", Kazhakkoottam:"Kazhakkoottam", Sreekaryam:"Sreekaryam",
+    Mannanthala:"Mannanthala", Palayam:"Palayam", Kesavadasapuram:"Kesavadasapuram", Ulloor:"Ulloor"
+  };
+ 
+  grid.innerHTML = "";
+  Object.entries(neighborhoods).forEach(([name, data]) => {
+    const card = document.createElement("div");
+    card.className = "neighborhood-card";
+    card.innerHTML = `
+      <div class="nc-name">📍 ${name}</div>
+      <div class="nc-malayalam">Neighbourhood · Thiruvananthapuram</div>
+      <div class="nc-stats">
+        <div class="nc-stat">
+          <div class="nc-stat-num">${data.total}</div>
+          <div class="nc-stat-label">Books</div>
+        </div>
+        <div class="nc-stat">
+          <div class="nc-stat-num">${data.lend}</div>
+          <div class="nc-stat-label">To Lend</div>
+        </div>
+        <div class="nc-stat">
+          <div class="nc-stat-num">${data.swap}</div>
+          <div class="nc-stat-label">To Swap</div>
+        </div>
+        <div class="nc-stat">
+          <div class="nc-stat-num">${data.genres.size}</div>
+          <div class="nc-stat-label">Genres</div>
+        </div>
+      </div>
+    `;
+    card.addEventListener("click", () => {
+      // jump to shelf, filter by neighborhood
+      switchTab("shelf");
+      document.getElementById("searchInput").value = name;
+      searchTerm = name.toLowerCase();
+      renderShelf();
+    });
+    grid.appendChild(card);
+  });
+}
+ 
+// ── TAB SWITCHING ──
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + tabId));
+}
+ 
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+ 
+// ── SEARCH ──
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderShelf();
+});
+ 
+// ── FILTER CHIPS ──
+document.getElementById("filterRow").addEventListener("click", (e) => {
+  const chip = e.target.closest(".filter-chip");
+  if (!chip) return;
+  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+  chip.classList.add("active");
+  activeFilter = chip.dataset.filter;
+  renderShelf();
+});
+ 
+// ── FORM SUBMIT ──
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const title = document.getElementById("fTitle").value.trim();
+  const author = document.getElementById("fAuthor").value.trim();
+  const neighborhood = document.getElementById("fNeighborhood").value;
+ 
+  if (!title || !author || !neighborhood) {
+    alert("Please fill in Title, Author, and Neighborhood.");
+    return;
+  }
+ 
+  const offering = document.querySelector('input[name="offering"]:checked').value;
+  const newBook = {
+    id: Date.now(),
+    title,
+    author,
+    lang:         document.getElementById("fLang").value,
+    genre:        document.getElementById("fGenre").value,
+    neighborhood,
+    offering,
+    owner:        document.getElementById("fOwner").value.trim() || "Anonymous",
+    note:         document.getElementById("fNote").value.trim(),
+  };
+ 
+  books.push(newBook);
+ 
+  // reset form
+  ["fTitle","fAuthor","fOwner","fNote"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("fNeighborhood").value = "";
+ 
+  // show toast
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3200);
+ 
+  // refresh
+  renderShelf();
+  renderNeighborhoods();
+ 
+  // switch to shelf
+  setTimeout(() => switchTab("shelf"), 1200);
+});
+ 
+// ── INIT ──
+renderShelf();
+renderNeighborhoods();
+</script>
+</body>
+</html>
